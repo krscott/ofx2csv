@@ -1,5 +1,6 @@
 #include "ofx2csv.h"
 
+#include "bits/posix2_lim.h"
 #include "ktl/lib/strings.h"
 #include "ktl/lib/strings.inc"
 #include "ofx2csv_macros.h"
@@ -91,6 +92,30 @@ static nodiscard bool parse_line(cursor *const c, strview *const line)
            parse_remaining(c, line);
 }
 
+static nodiscard bool parse_metadata(cursor *const c)
+{
+    cursor tmp = *c;
+    strview line, key, value;
+    bool const ok =
+        parse_line(&tmp, &line) && strview_split(line, ':', &key, &value);
+
+    if (ok)
+    {
+        *c = tmp;
+        debugf(
+            "meta " strview_fmts " : " strview_fmts "\n",
+            strview_fmtv(key),
+            strview_fmtv(value)
+        );
+    }
+    else
+    {
+        c->err = "Expected metadata";
+    }
+
+    return ok;
+}
+
 nodiscard bool ofx2csv_data_parse(
     ofx2csv_data *const data,
     char const *const s,
@@ -108,14 +133,22 @@ nodiscard bool ofx2csv_data_parse(
 
     cursor c = {.tail = source};
 
-    strview line;
-    while (parse_line(&c, &line))
+    while (parse_metadata(&c))
     {
-        printf("line: `" strview_fmts "`\n", strview_fmtv(line));
     }
 
-    if (c.err)
+    bool const ok = true;
+
+    // strview line;
+    // while (c.tail.len && parse_line(&c, &line))
+    // {
+    //     printf("line: `" strview_fmts "`\n", strview_fmtv(line));
+    // }
+
+    if (!ok)
     {
+        expect(c.err);
+
         size_t lineno, colno;
         cursor_get_line_and_col(c, source, &lineno, &colno);
         eprintf(

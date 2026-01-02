@@ -42,7 +42,7 @@
         pkgs = nixpkgs.legacyPackages.${system};
 
         # Final derivation including any overrides made to output package
-        inherit (self.packages.${system}) c-start c-start-gcc;
+        inherit (self.packages.${system}) ofx2csv ofx2csv-gcc;
 
         devPkgs =
           with pkgs;
@@ -52,7 +52,7 @@
             clang-tools # NOTE: clang-tools must come before clang
             clang
           ]
-          ++ c-start.buildInputs;
+          ++ ofx2csv.buildInputs;
 
         mkApp = text: {
           type = "app";
@@ -67,34 +67,34 @@
       in
       {
         packages = {
-          c-start = pkgs.callPackage ./. {
+          ofx2csv = pkgs.callPackage ./. {
             inherit (kcli.packages.${system}) kcli;
             inherit (ktest.packages.${system}) ktest;
             inherit (ktl.packages.${system}) ktl;
             stdenv = pkgs.clangStdenv;
           };
 
-          c-start-gcc = c-start.override {
+          ofx2csv-gcc = ofx2csv.override {
             inherit (pkgs) stdenv;
           };
 
-          c-start-win = c-start.override {
+          ofx2csv-win = ofx2csv.override {
             inherit (pkgs.pkgsCross.mingwW64) stdenv;
           };
 
-          default = c-start;
+          default = ofx2csv;
 
-          c-start-test = c-start.override {
+          ofx2csv-test = ofx2csv.override {
             doCheck = true;
           };
-          c-start-gcc-test = c-start-gcc.override {
+          ofx2csv-gcc-test = ofx2csv-gcc.override {
             doCheck = true;
           };
         };
 
         devShells = {
           default = pkgs.mkShell {
-            inputsFrom = [ c-start ];
+            inputsFrom = [ ofx2csv ];
             nativeBuildInputs = devPkgs;
             shellHook = ''
               source dev_shell.sh

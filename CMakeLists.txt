@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(c-start LANGUAGES C)
+project(ofx2csv LANGUAGES C)
 
 if("$ENV{CC}" MATCHES ".*mingw32.*")
   # Required for Nix pkgCross

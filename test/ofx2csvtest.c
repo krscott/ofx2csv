@@ -1,4 +1,4 @@
-#include "cstart.h"
+#include "ofx2csv.h"
 
 #include "ktest.inc"
 #include <stdlib.h>
@@ -8,7 +8,7 @@ KTEST_MAIN
 {
     KTEST(t_greet_name)
     {
-        char *greeting = cstart_create_greeting("Kris");
+        char *greeting = ofx2csv_create_greeting("Kris");
         ASSERT_TRUE(greeting);
 
         ASSERT_TRUE(0 == strcmp(greeting, "Hello, Kris!"));
@@ -18,7 +18,7 @@ KTEST_MAIN
 
     KTEST(t_greet_null)
     {
-        char *greeting = cstart_create_greeting(NULL);
+        char *greeting = ofx2csv_create_greeting(NULL);
         ASSERT_TRUE(greeting);
 
         ASSERT_TRUE(0 == strcmp(greeting, "Hello, World!"));

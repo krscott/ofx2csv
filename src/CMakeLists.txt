@@ -1,6 +1,6 @@
-add_library(cstart cstart.c)
+add_library(ofx2csv ofx2csv.c)
 
-target_include_directories(cstart PUBLIC ${PROJECT_SOURCE_DIR}/include)
-# target_sources(cstart PRIVATE file.c)
+target_include_directories(ofx2csv PUBLIC ${PROJECT_SOURCE_DIR}/include)
+# target_sources(ofx2csv PRIVATE file.c)
 
-install(TARGETS cstart)
+install(TARGETS ofx2csv)

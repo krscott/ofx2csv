@@ -1,4 +1,4 @@
-# c-start
+# ofx2csv
 
 My rather opinionated C project template.
 

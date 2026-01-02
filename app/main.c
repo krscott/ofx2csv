@@ -1,4 +1,4 @@
-#include "cstart.h"
+#include "ofx2csv.h"
 
 #include "kcli.inc"
 #include <stdbool.h>
@@ -41,10 +41,10 @@ int main(int const argc, char const *const *const argv)
 
     if (opts.verbose)
     {
-        fprintf(stderr, "c-start: Creating greeting...\n");
+        fprintf(stderr, "ofx2csv: Creating greeting...\n");
     }
 
-    char *greeting = cstart_create_greeting(opts.name);
+    char *greeting = ofx2csv_create_greeting(opts.name);
 
     printf("%s\n", greeting);
 

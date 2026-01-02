@@ -8,7 +8,7 @@
   doCheck ? false,
 }:
 stdenv.mkDerivation {
-  name = "c-start";
+  name = "ofx2csv";
   src = lib.cleanSource ./.;
   inherit doCheck;
 

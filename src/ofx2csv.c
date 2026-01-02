@@ -1,3 +1,3 @@
 #include "ofx2csv.h"
 
-bool verbose = false;
+bool ofx2csv_verbose = false;

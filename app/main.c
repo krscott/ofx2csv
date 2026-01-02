@@ -1,4 +1,5 @@
 #include "ofx2csv.h"
+#include "ofx2csv_macros.h"
 
 #include "kcli.inc"
 #include <stdbool.h>
@@ -36,7 +37,7 @@ static cliopts cliopts_parse(int const argc, char const *const *const argv)
 int main(int const argc, char const *const *const argv)
 {
     cliopts opts = cliopts_parse(argc, argv);
-    verbose = opts.verbose;
+    ofx2csv_verbose = opts.verbose;
 
     debugf("Parsing file: %s\n", opts.filename);
 

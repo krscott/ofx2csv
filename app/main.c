@@ -2,7 +2,11 @@
 #include "ofx2csv_macros.h"
 
 #include "kcli.inc"
+#include "sys/types.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct
 {
@@ -20,7 +24,6 @@ static cliopts cliopts_parse(int const argc, char const *const *const argv)
         {
             .pos_name = "file",
             .ptr_str = &opts.filename,
-            .optional = true,
             .help = "File to parse",
         },
         {
@@ -40,8 +43,18 @@ int main(int const argc, char const *const *const argv)
     ofx2csv_verbose = opts.verbose;
 
     debugf("Parsing file: %s\n", opts.filename);
+    FILE *const fp = fopen(opts.filename, "r");
+    expectf_perror(fp, "fopen");
 
-    panicf("todo");
+    char *buffer = NULL;
+    size_t len;
+    ssize_t const bytes_read = getdelim(&buffer, &len, '\0', fp);
+    expectf_perror(bytes_read >= 0, "getdelim");
+    fclose(fp);
 
+    ofx2csv_data data;
+    (void)ofx2csv_data_parse(&data, buffer, (size_t)bytes_read, opts.filename);
+
+    free(buffer);
     return 0;
 }

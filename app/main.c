@@ -2,27 +2,25 @@
 
 #include "kcli.inc"
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
-struct opts
+typedef struct
 {
-    char const *name;
+    char const *filename;
     bool verbose;
-};
+} cliopts;
 
-static struct opts opts_parse(int const argc, char const *const *const argv)
+static cliopts cliopts_parse(int const argc, char const *const *const argv)
 {
-    struct opts opts = {0};
+    cliopts opts = {0};
 
     KCLI_PARSE(
         argc,
         argv,
         {
-            .pos_name = "name",
-            .ptr_str = &opts.name,
+            .pos_name = "file",
+            .ptr_str = &opts.filename,
             .optional = true,
-            .help = "Name to greet",
+            .help = "File to parse",
         },
         {
             .short_name = 'v',
@@ -37,18 +35,12 @@ static struct opts opts_parse(int const argc, char const *const *const argv)
 
 int main(int const argc, char const *const *const argv)
 {
-    struct opts opts = opts_parse(argc, argv);
+    cliopts opts = cliopts_parse(argc, argv);
+    verbose = opts.verbose;
 
-    if (opts.verbose)
-    {
-        fprintf(stderr, "ofx2csv: Creating greeting...\n");
-    }
+    debugf("Parsing file: %s\n", opts.filename);
 
-    char *greeting = ofx2csv_create_greeting(opts.name);
+    panicf("todo");
 
-    printf("%s\n", greeting);
-
-    free(greeting);
-
-    return greeting ? 0 : 1;
+    return 0;
 }

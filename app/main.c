@@ -52,9 +52,15 @@ int main(int const argc, char const *const *const argv)
     expectf_perror(bytes_read >= 0, "getdelim");
     fclose(fp);
 
-    ofx2csv_data data;
-    (void)ofx2csv_data_parse(&data, buffer, (size_t)bytes_read, opts.filename);
+    ofx2csv_data data = ofx2csv_data_init();
+    bool ok =
+        ofx2csv_data_parse(&data, buffer, (size_t)bytes_read, opts.filename);
+    if (ok)
+    {
+        ofx2csv_data_write_csv(&data, stdout);
+    }
+    ofx2csv_data_deinit(&data);
 
     free(buffer);
-    return 0;
+    return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

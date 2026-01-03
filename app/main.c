@@ -2,11 +2,12 @@
 #include "ofx2csv_macros.h"
 
 #include "kcli.inc"
-#include "sys/types.h"
+#include "ktl/lib/io.h"
+#include "ktl/lib/io.inc"
+#include "ktl/lib/strings.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct
 {
@@ -60,17 +61,18 @@ int main(int const argc, char const *const *const argv)
     FILE *const input_file = fopen(opts.input_filename, "r");
     expectf_perror(input_file, "fopen");
 
-    char *buffer = NULL;
-    size_t len;
-    ssize_t const bytes_read = getdelim(&buffer, &len, '\0', input_file);
-    expectf_perror(bytes_read >= 0, "getdelim");
+    strbuf input_buf = strbuf_init();
+    expectf_perror(
+        strbuf_append_stream(&input_buf, input_file),
+        "File read error"
+    );
     fclose(input_file);
 
     ofx2csv_data data = ofx2csv_data_init();
     bool ok = ofx2csv_data_parse(
         &data,
-        buffer,
-        (size_t)bytes_read,
+        input_buf.ptr,
+        input_buf.len,
         opts.input_filename,
         opts.account_name
     );
@@ -90,6 +92,6 @@ int main(int const argc, char const *const *const argv)
     }
     ofx2csv_data_deinit(&data);
 
-    free(buffer);
+    strbuf_deinit(&input_buf);
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

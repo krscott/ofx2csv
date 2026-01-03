@@ -34,7 +34,7 @@ run() {
         bld
 
         set -x
-        ./build/app/ofx2csv-app "$@"
+        ./build/app/ofx2csv "$@"
     )
 }
 

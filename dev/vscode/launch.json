@@ -5,7 +5,7 @@
             "name": "Debug LLDB",
             "type": "lldb-dap",
             "request": "launch",
-            "program": "build/app/ofx2csv-app",
+            "program": "build/app/ofx2csv",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopOnEntry": false,

@@ -1,15 +1,6 @@
 # ofx2csv
 
-My rather opinionated C project template.
-
-To start a project with this template, run:
-```
-./init-template.sh new_project_name
-```
-
-It comes with some of my personal C libraries. Delete what you don't need.
-
-Don't forget to [change](https://choosealicense.com/) the LICENSE.
+Convert OFX to CSV that is friendly to budget apps.
 
 ## Development
 

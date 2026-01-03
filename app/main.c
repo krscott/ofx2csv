@@ -12,6 +12,7 @@ typedef struct
 {
     char const *input_filename;
     char const *output_filename;
+    char const *account_name;
     bool verbose;
 } cliopts;
 
@@ -32,6 +33,12 @@ static cliopts cliopts_parse(int const argc, char const *const *const argv)
             .long_name = "output",
             .ptr_str = &opts.output_filename,
             .help = "Output file (defaults to stdout)",
+        },
+        {
+            .short_name = 'a',
+            .long_name = "account",
+            .ptr_str = &opts.account_name,
+            .help = "Account name (defaults to Account ID)",
         },
         {
             .short_name = 'v',
@@ -64,7 +71,8 @@ int main(int const argc, char const *const *const argv)
         &data,
         buffer,
         (size_t)bytes_read,
-        opts.input_filename
+        opts.input_filename,
+        opts.account_name
     );
     if (ok)
     {

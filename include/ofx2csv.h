@@ -38,7 +38,11 @@ ofx2csv_nodiscard ofx2csv_data ofx2csv_data_init(void);
 void ofx2csv_data_deinit(ofx2csv_data *data);
 
 ofx2csv_nodiscard bool ofx2csv_data_parse(
-    ofx2csv_data *data, char const *s, size_t n, char const *filename
+    ofx2csv_data *data,
+    char const *s,
+    size_t n,
+    char const *filename,
+    char const *account_name
 );
 void ofx2csv_data_write_csv(ofx2csv_data const *data, FILE *stream);
 

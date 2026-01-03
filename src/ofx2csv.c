@@ -259,7 +259,8 @@ nodiscard bool ofx2csv_data_parse(
     ofx2csv_data *const data,
     char const *const s,
     size_t const n,
-    char const *filename
+    char const *filename,
+    char const *const account_name
 )
 {
     if (!filename)
@@ -285,7 +286,8 @@ nodiscard bool ofx2csv_data_parse(
         );
     }
 
-    strview account = {0};
+    strview account =
+        account_name ? strview_from_terminated(account_name) : (strview){0};
     ofx2csv_row row = {0};
     bool row_already_added = false;
 
@@ -303,7 +305,10 @@ nodiscard bool ofx2csv_data_parse(
 
                 if (strview_eq(key, TAG_ACCTID))
                 {
-                    account = value;
+                    if (!account_name)
+                    {
+                        account = value;
+                    }
                 }
                 else if (strview_eq(key, TAG_DTPOSTED))
                 {

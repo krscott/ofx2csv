@@ -21,13 +21,13 @@ typedef struct
     char const *err;
 } cursor;
 
-static const strview TAG_OFX = strview_const("OFX");
-static const strview TAG_STMTTRN = strview_const("STMTTRN");
-static const strview TAG_ACCTID = strview_const("ACCTID");
-static const strview TAG_DTPOSTED = strview_const("DTPOSTED");
-static const strview TAG_TRNAMT = strview_const("TRNAMT");
-static const strview TAG_NAME = strview_const("NAME");
-static const strview TAG_MEMO = strview_const("MEMO");
+#define TAG_OFX strview_const("OFX")
+#define TAG_STMTTRN strview_const("STMTTRN")
+#define TAG_ACCTID strview_const("ACCTID")
+#define TAG_DTPOSTED strview_const("DTPOSTED")
+#define TAG_TRNAMT strview_const("TRNAMT")
+#define TAG_NAME strview_const("NAME")
+#define TAG_MEMO strview_const("MEMO")
 
 static void cursor_get_line_and_col(
     cursor const c,
@@ -376,7 +376,7 @@ exit_tag_parsing:
         size_t lineno, colno;
         cursor_get_line_and_col(c, source, &lineno, &colno);
         eprintf(
-            "Parse error: %s\n  at %s:%lu:%lu\n",
+            "Parse error: %s\n  at %s:%zu:%zu\n",
             c.err,
             filename,
             lineno,
@@ -421,7 +421,7 @@ void ofx2csv_data_write_csv(ofx2csv_data const *const data, FILE *const stream)
         fputc(',', stream);
         fprintf(
             stream,
-            "%ld.%ld",
+            i64_fmts "." i64_fmts,
             row.amount_cents / 100,
             i64_abs(row.amount_cents) % 100
         );

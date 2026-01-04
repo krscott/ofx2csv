@@ -25,7 +25,7 @@ static cliopts cliopts_parse(int const argc, char const *const *const argv)
         argc,
         argv,
         {
-            .pos_name = "file",
+            .name = "file",
             .ptr_str = &opts.input_filename,
             .help = "File to parse",
         },

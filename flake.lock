@@ -152,11 +152,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765514993,
-        "narHash": "sha256-B1guVRYqwC2kDh8+Im5Yxk6hz6ns/Rap7Zdg5cuBT3k=",
+        "lastModified": 1767559436,
+        "narHash": "sha256-qZxq+wYigzFxbl3sDcNLG8KGrTa9LqXfkK618IP7P3s=",
         "owner": "krscott",
         "repo": "kcli",
-        "rev": "bacce58329bffa5c51629cdd0a73763b2ad9a78f",
+        "rev": "c535d27c0669ebeaa8458518328d7d5fd0fea3cf",
         "type": "github"
       },
       "original": {
@@ -174,11 +174,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765514762,
-        "narHash": "sha256-IG5KbiY1o2eyIYogFyNtDXYSynz+FokQSyTMFrccOvU=",
+        "lastModified": 1767559436,
+        "narHash": "sha256-qZxq+wYigzFxbl3sDcNLG8KGrTa9LqXfkK618IP7P3s=",
         "owner": "krscott",
         "repo": "kcli",
-        "rev": "f88d8a55827e6bf686a432a92249a0de2c4af317",
+        "rev": "c535d27c0669ebeaa8458518328d7d5fd0fea3cf",
         "type": "github"
       },
       "original": {
@@ -241,11 +241,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1765514914,
-        "narHash": "sha256-Lkz/glUd4IHLvz8SyRcaBsYpXZa7d7Yi2opCnAZNDmI=",
+        "lastModified": 1767559644,
+        "narHash": "sha256-mWR/pM7sqpo6/C6hNMJO06olKG0G4lRjJQGn5jQp7h0=",
         "owner": "krscott",
         "repo": "ktest",
-        "rev": "c4a5f596f423bed052af66153fbadadda3860fc2",
+        "rev": "6a8be712e12e4053d1e09c6120262f20c8b03871",
         "type": "github"
       },
       "original": {

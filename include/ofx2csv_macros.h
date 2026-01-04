@@ -10,6 +10,8 @@
 
 #define nodiscard ofx2csv_nodiscard
 
+#define countof(arr) (sizeof(arr) / sizeof((arr)[0]))
+
 #define eprintf(...) fprintf(stderr, __VA_ARGS__)
 
 #define debugf(...)                                                            \

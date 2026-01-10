@@ -434,7 +434,7 @@ static void write_escaped_string(strview const sv, FILE *const stream)
 
 void ofx2csv_data_write_csv(ofx2csv_data const *const data, FILE *const stream)
 {
-    fprintf(stream, "Account, Date, Name, Memo, Amount, Balance\n");
+    fprintf(stream, "Account,Date,Name,Memo,Amount,Balance\n");
 
     for (size_t i = 0; i < data->rows.len; ++i)
     {

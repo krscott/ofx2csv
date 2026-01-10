@@ -421,4 +421,6 @@ void ofx2csv_data_write_csv(ofx2csv_data const *const data, FILE *const stream)
         );
         fputc('\n', stream);
     }
+
+    fflush(stream);
 }

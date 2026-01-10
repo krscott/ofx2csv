@@ -65,13 +65,14 @@ int main(int const argc, char const *const *const argv)
     cliopts opts = cliopts_parse(argc, argv);
     ofx2csv_verbose = opts.verbose;
 
-    strbuf input_buf = strbuf_init();
+    strbufvec inputs = strbufvec_init();
     ofx2csv_data data = ofx2csv_data_init();
 
     bool ok = true;
 
     for (size_t i = 0; ok && i < opts.input_filenames_count; ++i)
     {
+        strbuf *input_buf;
         char const *const input_filename = opts.input_filenames[i];
         debugf("Parsing file: %s\n", input_filename);
 
@@ -79,9 +80,9 @@ int main(int const argc, char const *const *const argv)
             FILE *const input_file = fopen(input_filename, "r");
             expectf_perror(input_file, "fopen");
 
-            strbuf_clear(&input_buf);
+            strbufvec_emplace_back(&inputs, &input_buf);
             expectf_perror(
-                strbuf_append_stream(&input_buf, input_file),
+                strbuf_append_stream(input_buf, input_file),
                 "File read error"
             );
 
@@ -90,8 +91,8 @@ int main(int const argc, char const *const *const argv)
 
         ok = ofx2csv_data_parse(
             &data,
-            input_buf.ptr,
-            input_buf.len,
+            input_buf->ptr,
+            input_buf->len,
             input_filename
         );
     }
@@ -112,6 +113,11 @@ int main(int const argc, char const *const *const argv)
     }
 
     ofx2csv_data_deinit(&data);
-    strbuf_deinit(&input_buf);
+
+    for (size_t i = 0; i < inputs.len; ++i)
+    {
+        strbuf_deinit(&inputs.ptr[i]);
+    }
+    strbufvec_deinit(&inputs);
     return ok ? EXIT_SUCCESS : EXIT_FAILURE;
 }

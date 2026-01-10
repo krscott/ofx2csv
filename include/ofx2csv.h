@@ -18,6 +18,7 @@ typedef struct
     strview name;
     strview memo;
     i64 amount_cents;
+    i64 balance_cents;
     u16 year;
     u8 month;
     u8 day;

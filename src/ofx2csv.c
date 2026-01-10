@@ -28,6 +28,10 @@ typedef struct
 #define TAG_TRNAMT strview_const("TRNAMT")
 #define TAG_NAME strview_const("NAME")
 #define TAG_MEMO strview_const("MEMO")
+#define TAG_BALAMT strview_const("BALAMT")
+
+#define money_fmts i64_fmts "." i64_fmts
+#define money_fmtv(x) ((x) / 100), (i64_abs(x) % 100)
 
 static void cursor_get_line_and_col(
     cursor const c,
@@ -288,6 +292,11 @@ nodiscard bool ofx2csv_data_parse(
     ofx2csv_row row = {0};
     bool row_already_added = false;
 
+    size_t const first_row = data->rows.len;
+
+    bool found_amount = false;
+    i64 running_balance_cents = 0;
+
     tag_kind kind;
     while (ok && (ok = parse_tag(&c, &kind, &key, &value)))
     {
@@ -328,6 +337,16 @@ nodiscard bool ofx2csv_data_parse(
                 {
                     row.memo = value;
                 }
+                else if (strview_eq(key, TAG_BALAMT))
+                {
+                    // TODO: Use only specific BALAMT (LEDGERBAL or AVAILBAL)
+                    found_amount = true;
+                    ok = get_currency_amount(value, &running_balance_cents);
+                    if (!ok)
+                    {
+                        c.err = "Failed to parse dollar amount";
+                    }
+                }
 
                 break;
             case TAG_START:
@@ -363,7 +382,22 @@ nodiscard bool ofx2csv_data_parse(
     }
 exit_tag_parsing:
 
-    if (!ok)
+    if (ok && !found_amount)
+    {
+        ok = false;
+        c.err = "Expected <BALAMT>";
+    }
+
+    if (ok)
+    {
+        for (size_t i = data->rows.len; i > first_row; --i)
+        {
+            ofx2csv_row *const row_ = &data->rows.ptr[i - 1];
+            row_->balance_cents = running_balance_cents;
+            running_balance_cents -= row_->amount_cents;
+        }
+    }
+    else
     {
         expect(c.err);
 
@@ -400,7 +434,7 @@ static void write_escaped_string(strview const sv, FILE *const stream)
 
 void ofx2csv_data_write_csv(ofx2csv_data const *const data, FILE *const stream)
 {
-    fprintf(stream, "Account, Date, Name, Memo, Amount\n");
+    fprintf(stream, "Account, Date, Name, Memo, Amount, Balance\n");
 
     for (size_t i = 0; i < data->rows.len; ++i)
     {
@@ -413,12 +447,9 @@ void ofx2csv_data_write_csv(ofx2csv_data const *const data, FILE *const stream)
         fputc(',', stream);
         write_escaped_string(row.memo, stream);
         fputc(',', stream);
-        fprintf(
-            stream,
-            i64_fmts "." i64_fmts,
-            row.amount_cents / 100,
-            i64_abs(row.amount_cents) % 100
-        );
+        fprintf(stream, money_fmts, money_fmtv(row.amount_cents));
+        fputc(',', stream);
+        fprintf(stream, money_fmts, money_fmtv(row.balance_cents));
         fputc('\n', stream);
     }
 
